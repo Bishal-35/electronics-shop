@@ -1,0 +1,33 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.role-select label {
+    margin: 0 10px;
+    cursor: pointer;
+}
+
+.role-select input[type="radio"] {
+    margin-right: 5px;
+}
+
+.error-message {
+    color: #ff0000;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 480px) {
+    .login-container {
+        margin: 20px;
+    }
+}
