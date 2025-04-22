@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customer List</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .customer-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .customer-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .customer-table th, .customer-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .customer-table th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .customer-table tr:hover {
+            background-color: #f5f5f5;
+        }
+        .back-btn {
+            padding: 10px 20px;
+            background-color: #666;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="customer-container">
+        <h1>Customer List</h1>
+        <a href="/admin-dashboard" class="back-btn">Back to Dashboard</a>
+        <table class="customer-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Phone Number</th>
+                    <th>Item ID</th>
+                    <th>Item Name</th>
+                    <th>Item Category</th>
+                    <th>Item Brand</th>
+                    <th>Quantity Purchased</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% customers.forEach(customer => { %>
+                    <tr>
+                        <td><%= customer.Customer_ID %></td>
+                        <td><%= customer.Name %></td>
+                        <td><%= customer.Phone_no %></td>
+                        <td><%= customer.Item_ID %></td>
+                        <td><%= customer.Item_name %></td>
+                        <td><%= customer.Item_category %></td>
+                        <td><%= customer.Item_brand %></td>
+                        <td><%= customer.Quantity_Purchased %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

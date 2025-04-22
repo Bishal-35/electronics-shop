@@ -9,44 +9,83 @@
             margin: 20px auto;
             padding: 20px;
         }
-        
+
         .inventory-table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
-        
+
         .inventory-table th, .inventory-table td {
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
-        
+
         .inventory-table th {
             background-color: #4CAF50;
             color: white;
         }
-        
+
         .inventory-table tr:nth-child(even) {
             background-color: #f2f2f2;
         }
-        
+
         .inventory-table tr:hover {
             background-color: #ddd;
         }
-        
-        .add-item-btn {
+
+        .add-item-btn, .back-btn, .submit-btn, .edit-btn {
             padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+        }
+
+        .add-item-btn {
+            background-color: #4CAF50;
+            color: white;
             margin-bottom: 20px;
         }
-        
+
         .add-item-btn:hover {
             background-color: #45a049;
+        }
+
+        .back-btn {
+            background-color: #555;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .back-btn:hover {
+            background-color: #333;
+        }
+
+        .submit-btn {
+            background-color: #4CAF50;
+            color: white;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            background-color: #45a049;
+        }
+
+        .edit-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 5px 10px;
+            margin-right: 5px;
+        }
+
+        .edit-btn:hover {
+            background-color: #45a049;
+        }
+
+        .quantity-input {
+            width: 50px;
+            text-align: center;
         }
 
         /* Modal styles */
@@ -54,10 +93,8 @@
             display: none;
             position: fixed;
             z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
             background-color: rgba(0,0,0,0.4);
         }
 
@@ -66,8 +103,7 @@
             margin: 15% auto;
             padding: 20px;
             border: 1px solid #888;
-            width: 80%;
-            max-width: 500px;
+            width: 80%; max-width: 500px;
             border-radius: 8px;
         }
 
@@ -99,108 +135,195 @@
             border-radius: 4px;
         }
 
-        .submit-btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        .submit-btn:hover {
-            background-color: #45a049;
-        }
     </style>
 </head>
 <body>
-    <div class="inventory-container">
-        <h1>Inventory Management</h1>
-        <button class="add-item-btn" onclick="document.getElementById('addItemModal').style.display='block'">Add New Item</button>
-        
-        <!-- Add Item Modal -->
-        <div id="addItemModal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="document.getElementById('addItemModal').style.display='none'">&times;</span>
-                <h2>Add New Item</h2>
-                <form action="/add-item" method="POST">
-                    <div class="form-group">
-                        <label for="Item_brand">Brand:</label>
-                        <input type="text" id="Item_brand" name="Item_brand" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="Item_name">Name:</label>
-                        <input type="text" id="Item_name" name="Item_name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="Item_category">Category:</label>
-                        <select id="Item_category" name="Item_category" required>
-                            <option value="">Select Category</option>
-                            <option value="Smartphone">Smartphone</option>
-                            <option value="Laptop">Laptop</option>
-                            <option value="TV">TV</option>
-                            <option value="Accessories">Accessories</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="Item_type">Type:</label>
-                        <input type="text" id="Item_type" name="Item_type" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="Item_quantity">Quantity:</label>
-                        <input type="number" id="Item_quantity" name="Item_quantity" min="0" required>
-                    </div>
-                    <button type="submit" class="submit-btn">Add Item</button>
-                </form>
-            </div>
-        </div>
+<div class="inventory-container">
+    <button onclick="window.history.back()" class="back-btn">&larr; Back</button>
+    <h1>Inventory Management</h1>
+    <button class="add-item-btn" onclick="document.getElementById('addItemModal').style.display='block'">Add New Item</button>
 
-        <table class="inventory-table">
-            <thead>
-                <tr>
-                    <th>S.No</th>
-                    <th>ID</th>
-                    <th>Brand</th>
-                    <th>Name</th>
-                    <th>Category</th>
-                    <th>Type</th>
-                    <th>Quantity</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% inventory.forEach((item, index) => { %>
-                    <tr>
-                        <td><%= index + 1 %></td>
-                        <td><%= item.Item_ID %></td>
-                        <td><%= item.Item_brand %></td>
-                        <td><%= item.Item_name %></td>
-                        <td><%= item.Item_category %></td>
-                        <td><%= item.Item_type %></td>
-                        <td><%= item.Item_quantity %></td>
-                        <td>
-                            <form action="/delete-item/<%= item.Item_ID %>" method="POST" style="display: inline;">
-                                <button type="submit" onclick="return confirm('Are you sure you want to delete this item?')"
-                                    style="background-color: #ff4444; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">
-                                    Delete
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                <% }); %>
-            </tbody>
-        </table>
+    <!-- Add Item Modal -->
+    <div id="addItemModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="document.getElementById('addItemModal').style.display='none'">&times;</span>
+            <h2>Add New Item</h2>
+            <form action="/add-item" method="POST">
+                <div class="form-group">
+                    <label for="Item_brand">Brand:</label>
+                    <input type="text" id="Item_brand" name="Item_brand" required>
+                </div>
+                <div class="form-group">
+                    <label for="Item_name">Name:</label>
+                    <input type="text" id="Item_name" name="Item_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="Item_category">Category:</label>
+                    <select id="Item_category" name="Item_category" required>
+                        <option value="">Select Category</option>
+                        <option value="Smartphone">Smartphone</option>
+                        <option value="Laptop">Laptop</option>
+                        <option value="TV">TV</option>
+                        <option value="Accessories">Accessories</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="Item_type">Type:</label>
+                    <input type="text" id="Item_type" name="Item_type" required>
+                </div>
+                <div class="form-group">
+                    <label for="Item_quantity">Quantity:</label>
+                    <input type="number" id="Item_quantity" name="Item_quantity" min="0" required>
+                </div>
+                <button type="submit" class="submit-btn">Add Item</button>
+            </form>
+        </div>
     </div>
 
-    <script>
-        // Modal close when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('addItemModal');
-            if (event.target == modal) {
-                modal.style.display = "none";
+    <!-- Reorder Modal -->
+    <div id="reorderModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="document.getElementById('reorderModal').style.display='none'">&times;</span>
+            <h2>Low Stock Alert!</h2>
+            <p id="reorderMessage"></p>
+            <button class="submit-btn">Okay</button>
+        </div>
+    </div>
+
+    <!-- Low Stock Table -->
+    <% const lowStockItems = inventory.filter(item => item.Item_quantity < 50); %>
+    <% if (lowStockItems.length > 0) { %>
+        <h2 style="color: red;">⚠️ Low Stock Items (Below 50)</h2>
+        <table class="inventory-table">
+            <thead>
+            <tr>
+                <th>S.No</th>
+                <th>ID</th>
+                <th>Brand</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Type</th>
+                <th>Quantity</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% lowStockItems.forEach((item, index) => { %>
+                <tr>
+                    <td><%= index + 1 %></td>
+                    <td><%= item.Item_ID %></td>
+                    <td><%= item.Item_brand %></td>
+                    <td><%= item.Item_name %></td>
+                    <td><%= item.Item_category %></td>
+                    <td><%= item.Item_type %></td>
+                    <td style="color: red;"><%= item.Item_quantity %></td>
+                </tr>
+            <% }); %>
+            </tbody>
+        </table>
+    <% } %>
+
+    <!-- Full Inventory Table -->
+    <h2>Full Inventory</h2>
+    <table class="inventory-table">
+        <thead>
+        <tr>
+            <th>S.No</th>
+            <th>ID</th>
+            <th>Brand</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Type</th>
+            <th>Quantity</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% inventory.forEach((item, index) => { %>
+            <tr id="item-<%= item.Item_ID %>">
+                <td><%= index + 1 %></td>
+                <td><%= item.Item_ID %></td>
+                <td><%= item.Item_brand %></td>
+                <td><%= item.Item_name %></td>
+                <td><%= item.Item_category %></td>
+                <td><%= item.Item_type %></td>
+                <td>
+                    <input type="number" class="quantity-input" value="<%= item.Item_quantity %>" id="quantity-<%= item.Item_ID %>" readonly>
+                </td>
+                <td>
+                    <button onclick="updateQuantity('<%= item.Item_ID %>', <%= item.Item_quantity %>, '<%= item.Item_brand %>', '<%= item.Item_name %>', '<%= item.Item_category %>', '<%= item.Item_type %>')" class="edit-btn">Add</button>
+                    <button onclick="enableEditQuantity('<%= item.Item_ID %>')" class="edit-btn">Edit</button>
+                    <form action="/delete-item/<%= item.Item_ID %>" method="POST" style="display: inline;">
+                        <button type="submit" onclick="return confirm('Are you sure you want to delete this item?')" style="background-color: #ff4444; color: white; padding: 5px 10px; border-radius: 3px;">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        <% }); %>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    window.onclick = function(event) {
+        const addItemModal = document.getElementById('addItemModal');
+        const reorderModal = document.getElementById('reorderModal');
+        if (event.target === addItemModal) addItemModal.style.display = "none";
+        if (event.target === reorderModal) reorderModal.style.display = "none";
+    }
+
+    async function updateQuantity(itemId, currentQuantity, brand, name, category, type) {
+        const newQuantity = currentQuantity + 1;
+
+        try {
+            const response = await fetch(`/update-quantity/${itemId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ quantity: newQuantity })
+            });
+
+            if (response.ok) {
+                const row = document.getElementById(`item-${itemId}`);
+                row.querySelector('.quantity-input').value = newQuantity;
+
+                if (newQuantity < 50) {
+                    const reorderModal = document.getElementById('reorderModal');
+                    const reorderMessage = document.getElementById('reorderMessage');
+                    reorderMessage.innerText = `Item: ${brand} ${name}\nCategory: ${category}\nType: ${type}\n\nQuantity is below 50. Please reorder.`;
+                    reorderModal.style.display = 'block';
+                }
             }
+        } catch (error) {
+            alert("Error occurred while updating quantity.");
         }
-    </script>
+    }
+
+    function enableEditQuantity(itemId) {
+        const quantityInput = document.getElementById(`quantity-${itemId}`);
+        quantityInput.readOnly = false;
+        quantityInput.focus();
+    }
+
+    // Show reorder modals on page load for low stock
+    window.onload = function() {
+        const lowStockItems = <%- JSON.stringify(lowStockItems) %>;
+        if (lowStockItems.length > 0) {
+            let index = 0;
+            const showNextReorderModal = () => {
+                if (index >= lowStockItems.length) return;
+
+                const item = lowStockItems[index];
+                document.getElementById('reorderMessage').innerText =
+                    `Item: ${item.Item_brand} ${item.Item_name}\nCategory: ${item.Item_category}\nType: ${item.Item_type}\n\nQuantity is below 50. Please reorder.`;
+                document.getElementById('reorderModal').style.display = 'block';
+
+                document.querySelector('#reorderModal .submit-btn').onclick = () => {
+                    document.getElementById('reorderModal').style.display = 'none';
+                    index++;
+                    setTimeout(showNextReorderModal, 300);
+                };
+            };
+            showNextReorderModal();
+        }
+    }
+</script>
 </body>
 </html>
